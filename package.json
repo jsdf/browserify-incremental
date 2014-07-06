@@ -1,0 +1,16 @@
+{
+  "name": "browserify-incremental",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Friend <james@jsdf.co> (http://jsdf.co/)",
+  "license": "MIT",
+  "dependencies": {
+    "browserify": "4.x",
+    "through": "^2.3.4",
+    "async": "^0.9.0"
+  }
+}
