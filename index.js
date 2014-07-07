@@ -15,10 +15,23 @@ function browserifyIncremental(files, opts) {
     } else {
         b = typeof files.bundle === 'function' ? files : browserify(files, opts);
     }
+    var cacheFile = opts.cacheFile || opts.cachefile;
     var cache = {};
     var pkgcache = {};
     var mtimes = {};
     var first = true;
+
+    if (cacheFile) {
+      try {
+        var incrementalCache = JSON.parse(fs.readFileSync(cacheFile, {encoding: 'utf8'}));
+        cache = incrementalCache.cache;
+        mtimes = incrementalCache.mtimes;
+        first = false;
+      } catch (err) {
+        // no existing cache file
+        b.emit('_cacheFileReadError', err);
+      }
+    }
     
     if (opts.cache) {
         cache = opts.cache;
@@ -31,13 +44,18 @@ function browserifyIncremental(files, opts) {
         delete opts.pkgcache;
     }
     
+    if (opts.mtimes) {
+        mtimes = opts.mtimes;
+        delete opts.mtimes;
+    }
+    
     b.on('package', function (file, pkg) {
         pkgcache[file] = pkg;
     });
     
     b.on('dep', function (dep) {
         cache[dep.id] = dep;
-        updateMtime(mtimes, dep.id)
+        if (!mtimes[dep.id]) updateMtime(mtimes, dep.id);
     });
     
     b.on('file', function (file) {
@@ -66,10 +84,11 @@ function browserifyIncremental(files, opts) {
         opts_.packageCache = pkgcache;
 
         opts_.deps = function(depsOpts) {
-          var d = through()
-          invalidateModifiedFiles(mtimes, cache, function() {
+          var d = through();
+          invalidateModifiedFiles(mtimes, cache, function(err, invalidated) {
+            b.emit('update', invalidated);
             b.deps(depsOpts).pipe(d);
-          })
+          });
           return d;
         }
         var outStream = bundle(opts_, cb);
@@ -81,11 +100,19 @@ function browserifyIncremental(files, opts) {
         
         function end () {
             first = false;
+            var updatedCache = {cache: cache, mtimes: mtimes};
             
             var delta = ((Date.now() - start) / 1000).toFixed(2);
             b.emit('log', bytes + ' bytes written (' + delta + ' seconds)');
             b.emit('time', Date.now() - start);
             b.emit('bytes', bytes);
+            b.emit('cache', updatedCache);
+            if (cacheFile) {
+              fs.writeFile(cacheFile, JSON.stringify(updatedCache), {encoding: 'utf8'}, function(err) {
+                if (err) b.emit('_cacheFileWriteError', err);
+                else b.emit('_cacheFileWritten', cacheFile);
+              });
+            }
         }
         return outStream;
     };
@@ -100,19 +127,22 @@ function updateMtime(mtimes, file) {
 }
 
 function invalidateModifiedFiles(mtimes, cache, done) {
-  async.each(Object.keys(cache), function(file, fileDone) {
+  async.reduce(Object.keys(cache), [], function(invalidated, file, fileDone) {
     fs.stat(file, function (err, stat) {
       if (err) {
-        console.error(err.message || err);
+        // console.error(err.message || err);
         return fileDone();
       }
       var mtimeNew = stat.mtime.getTime();
       if(!(mtimes[file] && mtimeNew && mtimeNew <= mtimes[file])) {
-        console.warn('invalidating', cache[file].name || file)
+        // console.warn('invalidating', cache[file].name || file)
+        invalidated.push(file);
         delete cache[file];
       }
       mtimes[file] = mtimeNew;
-      fileDone();
+      fileDone(null, invalidated);
     });
-  }, done);
+  }, function(err, invalidated) {
+    done(null, invalidated)
+  });
 }
