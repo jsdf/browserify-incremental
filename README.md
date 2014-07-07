@@ -2,23 +2,24 @@
 
 Incremental rebuild for browserify
 
-Update any source file and re-bundle, and it will build super fast, as only 
-changed files will be parsed.
+Update any source file and re-bundle, and only changed files will be parsed, 
+so it will build super fast (even with big dependencies like React!).
 
 # example
 
 Use `browserifyinc` with all the same arguments as `browserify` except that
-`-o` is mandatory, and `--cachefile` specifies the file to use for caching deps:
+`-o` is mandatory, and the added `--cachefile` argument specifies where to 
+put the cache file:
 
 ```
-$ browserifyinc test-module/ -o output/bundle.js
+$ browserifyinc -r react -o output/bundle.js  -v
+556200 bytes written to output/bundle.js (1.38 seconds)
+$ browserifyinc -r react -o output/bundle.js  -v
+556200 bytes written to output/bundle.js (0.13 seconds)
 ```
-
-If you don't specify `--cachefile`, a `browserify-cache.json` file will be 
-created in the current working directory.
 
 Now if you change some files and rebuild, only the changed files will be parsed
-and the rest will reuse the previous build's cache.
+and the rest will reuse the previous build's cached output.
 
 You can use `-v` to get more verbose output to show which files have changed and 
 how long the bundling took (in seconds):
@@ -27,8 +28,11 @@ how long the bundling took (in seconds):
 $ browserifyinc test-module/ -o output/bundle.js -v
 changed files:
 /Users/jfriend/code/browserify-incremental/example/test-module/index.js
-1000303 bytes written to output/bundle.js (0.22 seconds)
+1000423 bytes written to output/bundle.js (0.18 seconds)
 ```
+
+If you don't specify `--cachefile`, a `browserify-cache.json` file will be 
+created in the current working directory.
 
 # usage
 
@@ -38,10 +42,10 @@ and `--cachefile`.
 # API
 
 ``` js
-var browserifyIncremental = require('browserify-incremental')
+var browserifyInc = require('browserify-incremental')
 ```
 
-## var b = browserifyIncremental(opts)
+## var b = browserifyInc(opts)
 
 Create a browserify bundle `b` from `opts`.
 
@@ -82,8 +86,17 @@ with the number of bytes in the bundle X and the time in seconds Y.
 With [npm](https://npmjs.org) do:
 
 ```
+$ npm install -g browserify-incremental
+```
+
+to get the browserifyinc command and:
+
+```
 $ npm install browserify-incremental
 ```
+
+to get just the library.
+
 
 # license
 
