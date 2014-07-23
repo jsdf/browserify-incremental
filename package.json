@@ -14,6 +14,7 @@
   "dependencies": {
     "browserify": "4.x",
     "through": "^2.3.4",
-    "async": "^0.9.0"
+    "async": "^0.9.0",
+    "browserify-cache-api": "^0.1.0"
   }
 }
