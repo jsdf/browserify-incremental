@@ -2,13 +2,18 @@
 
 Incremental rebuild for browserify
 
-Update any source file and re-bundle, and only changed files will be parsed, 
+Update any source file and re-bundle, and only changed files will be parsed,
 so it will build super fast (even with big dependencies like React!).
+
+### Compatibility
+
+`browserify-incremental` is currently only compatible with browserify
+4.x and below. browserify 5+ support coming soon.
 
 # example
 
 Use `browserifyinc` with all the same arguments as `browserify` except that
-`-o` is mandatory, and the added `--cachefile` argument specifies where to 
+`-o` is mandatory, and the added `--cachefile` argument specifies where to
 put the cache file:
 
 ```
@@ -21,7 +26,7 @@ $ browserifyinc -r react -o output/bundle.js  -v
 Now if you change some files and rebuild, only the changed files will be parsed
 and the rest will reuse the previous build's cached output.
 
-You can use `-v` to get more verbose output to show which files have changed and 
+You can use `-v` to get more verbose output to show which files have changed and
 how long the bundling took (in seconds):
 
 ```
@@ -31,12 +36,12 @@ changed files:
 1000423 bytes written to output/bundle.js (0.18 seconds)
 ```
 
-If you don't specify `--cachefile`, a `browserify-cache.json` file will be 
+If you don't specify `--cachefile`, a `browserify-cache.json` file will be
 created in the current working directory.
 
 # usage
 
-All the bundle options are the same as the browserify command except for `-v` 
+All the bundle options are the same as the browserify command except for `-v`
 and `--cachefile`.
 
 # API
@@ -50,10 +55,10 @@ var browserifyInc = require('browserify-incremental')
 Create a browserify bundle `b` from `opts`.
 
 `b` is exactly like a browserify bundle except that it caches file contents and
-calling `b.bundle()` extra times past the first time will be much faster 
+calling `b.bundle()` extra times past the first time will be much faster
 due to that caching.
 
-By default, when used via API, browserify-incremental will only use in-memory 
+By default, when used via API, browserify-incremental will only use in-memory
 caching, however you can pass a `cacheFile` option which will use an on disk
 cache instead (useful for build scripts which run once and exit).
 
