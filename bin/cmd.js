@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 var browserifyIncremental = require('../');
-var through = require('through');
 var fs = require('fs');
 var path = require('path');
 var fromArgs = require('browserify/bin/args');
+var xtend = require('xtend');
 
 var b, outfile, verbose, cachefile;
 
-var b_ = fromArgs(process.argv.slice(2))
+var b_ = fromArgs(process.argv.slice(2), browserifyIncremental.args)
 cachefile = b_.argv.cachefile || './browserify-cache.json'
 outfile = b_.argv.o || b_.argv.outfile;
 verbose = b_.argv.v || b_.argv.verbose;
