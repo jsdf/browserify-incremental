@@ -16,12 +16,20 @@ function browserifyIncremental(files, opts) {
   var b; // browserify instance
 
   // browserify plugin boilerplate, normalises variable arguments
-  if (!opts) {
-    opts = files || {};
-    files = undefined;
-    b = typeof opts.bundle === 'function' ? opts : browserify(xtend(browserifyCache.args, opts));
+  if (files && typeof files.bundle === 'function') {
+    // browserify instance as first arg
+    b = files;
+    opts = opts || b._options;
   } else {
-    b = typeof files.bundle === 'function' ? files : browserify(files, xtend(browserifyCache.args, opts));
+    if (!opts) {
+      // opts as first arg (or no args)
+      opts = files || {};
+      files = undefined;
+      b =  browserify(xtend(browserifyCache.args, opts));
+    } else {
+      // files as first arg, opts as second arg
+      b = browserify(files, xtend(browserifyCache.args, opts));
+    }    
   }
 
   browserifyCache(b, opts);
