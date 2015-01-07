@@ -1,7 +1,7 @@
 {
   "name": "browserify-incremental",
   "version": "1.3.0",
-  "description": "",
+  "description": "Fast incremental rebuilds for browserify",
   "main": "index.js",
   "bin": {
     "browserifyinc": "./bin/cmd.js"

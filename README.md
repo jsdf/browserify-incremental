@@ -7,9 +7,8 @@ so it will build super fast (even with big dependencies like React!).
 
 # example
 
-Use `browserifyinc` with all the same arguments as `browserify` except that
-`-o` is mandatory, and the added `--cachefile` argument specifies where to 
-put the cache file:
+Use `browserifyinc` with all the same arguments as `browserify`, with the added 
+`--cachefile` argument specifying where to put the cache file:
 
 ```
 $ browserifyinc -r react -o output/bundle.js  -v
@@ -21,11 +20,11 @@ $ browserifyinc -r react -o output/bundle.js  -v
 Now if you change some files and rebuild, only the changed files will be parsed
 and the rest will reuse the previous build's cached output.
 
-You can use `-v` to get more verbose output to show which files have changed and 
-how long the bundling took (in seconds):
+You can use `-v`/`--verbose` to get more verbose output to show which files have 
+changed and how long the bundling took (`-o`/`--outfile` is mandatory when using `-v`):
 
 ```
-$ browserifyinc test-module/ -o output/bundle.js -v
+$ browserifyinc test-module/ -v -o output/bundle.js
 changed files:
 /Users/jfriend/code/browserify-incremental/example/test-module/index.js
 1000423 bytes written to output/bundle.js (0.18 seconds)
@@ -58,7 +57,31 @@ caching, however you can pass a `cacheFile` option which will use an on disk
 cache instead (useful for build scripts which run once and exit).
 
 You can also pass in a browserify instance of your own, and that will be used
-instead of creating a new one.
+instead of creating a new one, however when you create your browserify instance 
+you must include the following options:
+
+```js
+{cache: {}, packageCache: {}, fullPaths: true}
+```
+
+For convenience, these options are available as `browserifyInc.args`, so you can 
+use them like:
+
+```js
+var browserify = require('browserify')
+var browserifyInc = require('browserify-incremental')
+var xtend = require('xtend')
+
+var b = browserify(xtend(browserifyInc.args, {
+  // your custom opts
+}))
+browserifyInc(b {cacheFile: './browserify-cache.json'})
+
+b.bundle().pipe(process.stdout)
+```
+
+The `cacheFile` opt can be passed to either the browserify or browserify-incremental
+constructor.
 
 # events
 
