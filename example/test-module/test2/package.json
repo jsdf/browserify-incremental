@@ -1,0 +1,9 @@
+{
+  "name": "test-module",
+  "version": "0.0.1",
+  "style" : "style/*.less",
+  "transforms" : ["less-css-stream"],
+  "dependencies": {
+    "less-css-stream": "^0.1.2"
+  }
+}
