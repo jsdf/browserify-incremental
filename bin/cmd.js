@@ -15,7 +15,7 @@ var b, outfile, verbose, cachefile;
 var b_ = fromArgs(process.argv.slice(2), browserifyIncremental.args)
 cachefile = b_.argv.cachefile || './browserify-cache.json'
 outfile = b_.argv.o || b_.argv.outfile;
-verbose = (b_.argv.v || b_.argv.verbose) && outfile;
+verbose = (b_.argv.v || b_.argv.verbose);
 b = browserifyIncremental(b_, {cacheFile: cachefile});
 
 b.on('update', function(changes) { 
@@ -77,7 +77,7 @@ bundle.on('error', errorExit);
 
 bundle.on('end', function () {
     if (verbose) {
-        console.error(bytes + ' bytes written to ' + outfile
+        console.error(bytes + ' bytes written to ' + (outfile || "stdout")
             + ' (' + (time / 1000).toFixed(2) + ' seconds)'
         );
     }
