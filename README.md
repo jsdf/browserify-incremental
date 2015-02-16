@@ -21,7 +21,7 @@ Now if you change some files and rebuild, only the changed files will be parsed
 and the rest will reuse the previous build's cached output.
 
 You can use `-v`/`--verbose` to get more verbose output to show which files have 
-changed and how long the bundling took (`-o`/`--outfile` is mandatory when using `-v`):
+changed and how long the bundling took:
 
 ```
 $ browserifyinc test-module/ -v -o output/bundle.js
