@@ -5,6 +5,16 @@ Incremental rebuild for browserify
 Update any source file and re-bundle, and only changed files will be parsed, 
 so it will build super fast (even with big dependencies like React!).
 
+
+## How is this different from [watchify](https://github.com/substack/watchify)?
+
+browserify-incremental can detect changes which occured in between runs, which 
+means it can be used as part of build systems which are invoked on demand, 
+without requiring a long lived process. Whereas watchify is slow for the first 
+run upon each startup, browserify-incremental is fast every time after the very 
+first.
+
+
 # example
 
 Use `browserifyinc` with all the same arguments as `browserify`, with the added 
@@ -34,6 +44,12 @@ If you don't specify `--cachefile`, a `browserify-cache.json` file will be
 created in the current working directory.
 
 # usage
+
+# CLI
+
+```
+browserifyinc --cachefile tmp/browserify-cache.json main.js > output.js
+```
 
 All the bundle options are the same as the browserify command except for `-v` 
 and `--cachefile`.
@@ -115,11 +131,17 @@ $ npm install -g browserify-incremental
 to get the browserifyinc command and:
 
 ```
-$ npm install browserify-incremental
+$ npm install --save browserify-incremental browserify
 ```
 
 to get just the library.
 
+## IMPORTANT
+
+You should install a specific version of browserify alongside 
+browserify-incremental (eg. with `--save`) to ensure that your browserify version 
+is locked by package.json, because browserify-incremental doesn't specify an 
+exact browserify version.
 
 # license
 
