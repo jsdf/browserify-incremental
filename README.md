@@ -91,7 +91,7 @@ var xtend = require('xtend')
 var b = browserify(xtend(browserifyInc.args, {
   // your custom opts
 }))
-browserifyInc(b {cacheFile: './browserify-cache.json'})
+browserifyInc(b, {cacheFile: './browserify-cache.json'})
 
 b.bundle().pipe(process.stdout)
 ```
