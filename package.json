@@ -27,6 +27,7 @@
     "browserify": "*"
   },
   "devDependencies": {
+    "browserify": "^13.0.0",
     "tap": "^0.4.12"
   }
 }
