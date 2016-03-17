@@ -103,7 +103,7 @@ constructor.
 
 ## b.on('bytes', function (bytes) {})
 
-When a bundle is generated, this event fires with the number of bytes.
+When a bundle is generated, this event fires with the number of bytes written.
 
 ## b.on('time', function (time) {})
 
@@ -125,7 +125,7 @@ with the number of bytes in the bundle X and the time in seconds Y.
 With [npm](https://npmjs.org) do:
 
 ```
-$ npm install -g browserify-incremental
+$ npm install -g browserify-incremental browserify
 ```
 
 to get the browserifyinc command and:
@@ -135,13 +135,6 @@ $ npm install --save browserify-incremental browserify
 ```
 
 to get just the library.
-
-## IMPORTANT
-
-You should install a specific version of browserify alongside 
-browserify-incremental (eg. with `--save`) to ensure that your browserify version 
-is locked by package.json, because browserify-incremental doesn't specify an 
-exact browserify version.
 
 # license
 
