@@ -2,22 +2,22 @@
 
 Incremental rebuild for browserify
 
-Update any source file and re-bundle, and only changed files will be parsed, 
+Update any source file and re-bundle, and only changed files will be parsed,
 so it will build super fast (even with big dependencies like React!).
 
 
 ## How is this different from [watchify](https://github.com/substack/watchify)?
 
-browserify-incremental can detect changes which occured in between runs, which 
-means it can be used as part of build systems which are invoked on demand, 
-without requiring a long lived process. Whereas watchify is slow for the first 
-run upon each startup, browserify-incremental is fast every time after the very 
+browserify-incremental can detect changes which occured in between runs, which
+means it can be used as part of build systems which are invoked on demand,
+without requiring a long lived process. Whereas watchify is slow for the first
+run upon each startup, browserify-incremental is fast every time after the very
 first.
 
 
 # example
 
-Use `browserifyinc` with all the same arguments as `browserify`, with the added 
+Use `browserifyinc` with all the same arguments as `browserify`, with the added
 `--cachefile` argument specifying where to put the cache file:
 
 ```
@@ -30,7 +30,7 @@ $ browserifyinc -r react -o output/bundle.js  -v
 Now if you change some files and rebuild, only the changed files will be parsed
 and the rest will reuse the previous build's cached output.
 
-You can use `-v`/`--verbose` to get more verbose output to show which files have 
+You can use `-v`/`--verbose` to get more verbose output to show which files have
 changed and how long the bundling took:
 
 ```
@@ -40,7 +40,7 @@ changed files:
 1000423 bytes written to output/bundle.js (0.18 seconds)
 ```
 
-If you don't specify `--cachefile`, a `browserify-cache.json` file will be 
+If you don't specify `--cachefile`, a `browserify-cache.json` file will be
 created in the current working directory.
 
 # usage
@@ -51,7 +51,7 @@ created in the current working directory.
 browserifyinc --cachefile tmp/browserify-cache.json main.js > output.js
 ```
 
-All the bundle options are the same as the browserify command except for `-v` 
+All the bundle options are the same as the browserify command except for `-v`
 and `--cachefile`.
 
 # API
@@ -65,22 +65,22 @@ var browserifyInc = require('browserify-incremental')
 Create a browserify bundle `b` from `opts`.
 
 `b` is exactly like a browserify bundle except that it caches file contents and
-calling `b.bundle()` extra times past the first time will be much faster 
+calling `b.bundle()` extra times past the first time will be much faster
 due to that caching.
 
-By default, when used via API, browserify-incremental will only use in-memory 
+By default, when used via API, browserify-incremental will only use in-memory
 caching, however you can pass a `cacheFile` option which will use an on disk
 cache instead (useful for build scripts which run once and exit).
 
 You can also pass in a browserify instance of your own, and that will be used
-instead of creating a new one, however when you create your browserify instance 
+instead of creating a new one, however when you create your browserify instance
 you must include the following options:
 
 ```js
 {cache: {}, packageCache: {}, fullPaths: true}
 ```
 
-For convenience, these options are available as `browserifyInc.args`, so you can 
+For convenience, these options are available as `browserifyInc.args`, so you can
 use them like:
 
 ```js
