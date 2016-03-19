@@ -4,15 +4,14 @@ var browserifyIncremental = require('../');
 var fs = require('fs');
 
 console.timeEnd('startup');
-var counter = 10;
-var testTimeout = 1000;
 var cache = true;
 
 console.time('cache fill');
+var opts;
 if (cache) {
-  var opts = {cacheFile: __dirname + '/output/cache.json'};
+  opts = {cacheFile: __dirname + '/output/cache.json'};
 } else {
-  var opts = {};
+  opts = {};
 }
 var b = browserifyIncremental([__dirname + '/test-module'], opts);
 console.timeEnd('cache fill');

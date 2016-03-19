@@ -4,16 +4,15 @@ var browserifyIncremental = require('../');
 var fs = require('fs');
 
 console.timeEnd('startup');
-var counter = 10;
-var testTimeout = 1000;
 var cache = true;
 
 console.time('cache fill');
+var opts;
 if (cache) {
   var incrementalCache = JSON.parse(fs.readFileSync(__dirname + '/output/cache.json', {encoding: 'utf8'}));
-  var opts = {cache:incrementalCache.cache, mtimes: incrementalCache.mtimes};
+  opts = {cache:incrementalCache.cache, mtimes: incrementalCache.mtimes};
 } else {
-  var opts = {};
+  opts = {};
 }
 console.timeEnd('cache fill');
 var b = browserifyIncremental(opts);

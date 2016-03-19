@@ -2,7 +2,6 @@ var test = require('tap').test;
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var path = require('path');
-var through = require('through2');
 var fs = require('fs');
 var xtend = require('xtend');
 
@@ -23,7 +22,7 @@ test('make sure it builds via command line', function(t) {
   if (!(outputdir.charAt(0) == '/' && outputdir.length > 1)) {
     throw new Error('unsafe outputdir for rm -rf');
   }
-  exec('rm -rfv ' + outputdir, function(err) {
+  exec('rm -rfv ' + outputdir, function() {
     exec('mkdir -p ' + outputdir, function(err) {
       t.notOk(err, 'dir created');
       fs.writeFileSync(requiresDynamicModule, 'require("./dynamic")');
@@ -80,7 +79,7 @@ function makeBuildProc() {
     env: xtend(process.env, {
       // allows require('foo') from lib/ dir
       NODE_PATH: path.join(exampledir, 'lib'),
-    })
+    }),
   });
 
   proc.stderr.pipe(process.stderr);

@@ -12,12 +12,12 @@ var requiresDynamicModule = path.join(outputdir, 'requires-dynamic.js');
 test('make sure it builds and builds again', function(t) {
   var iterations = 3;
 
-  t.plan(1 + iterations * 2);
+  t.plan(11); // 1 assertion at setup + (3 builds * 3 assertions) + 1 post assertion
 
   if (!(outputdir.charAt(0) == '/' && outputdir.length > 1)) {
     throw new Error('unsafe outputdir for rm -rf');
   }
-  exec('rm -rfv ' + outputdir, function(err) {
+  exec('rm -rfv ' + outputdir, function() {
     exec('mkdir -p ' + outputdir, function(err) {
       t.notOk(err, 'dir created');
       fs.writeFileSync(requiresDynamicModule, 'require("./dynamic")');
@@ -33,10 +33,11 @@ test('make sure it builds and builds again', function(t) {
     var numChanged = 0;
     var cacheSize = Object.keys(b._options.cache).length;
 
-    b.on('changedDeps', function(invalidated, deleted) {
+    b.on('changedDeps', function(invalidated) {
       if (invalidated) numChanged = invalidated.length;
     });
 
+    var outputFile = path.join(outputdir, 'build' + n + '.js');
     b.bundle()
       .pipe(through())
       .on('finish', function() {
@@ -53,9 +54,11 @@ test('make sure it builds and builds again', function(t) {
           'cache size ' + cacheSize + ' at start of build ' + n
         );
       })
-      .pipe(fs.createWriteStream(path.join(outputdir, 'build' + n + '.js')))
+      .pipe(fs.createWriteStream(outputFile))
       .on('close', function() {
         if (n == nmax) {
+          var output = fs.readFileSync(outputFile, {encoding: 'utf8'});
+          t.notMatch(output, 'module.exports=module.exports={', "doesn't append json prelude twice");
           t.end();
         } else {
           setTimeout(function() {
@@ -72,7 +75,7 @@ function make() {
   var opts = {cacheFile: path.join(outputdir, 'cache.json')};
 
   var b = browserifyIncremental(opts);
-  // b.add(path.join(basedir,'example','test-module'))
+  b.add(path.join(basedir, 'example/test-module'));
   b.add(requiresDynamicModule);
 
   return b;
