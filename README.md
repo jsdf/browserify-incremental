@@ -143,6 +143,10 @@ browserify-incremental (eg. with `--save`) to ensure that your browserify versio
 is locked by package.json, because browserify-incremental doesn't specify an 
 exact browserify version.
 
+## Contributing
+
+Please see the [Contributor Guidelines](CONTRIBUTING.md).
+
 # license
 
 MIT
