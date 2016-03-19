@@ -1,6 +1,6 @@
 {
   "name": "browserify-incremental",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Fast incremental rebuilds for browserify",
   "main": "index.js",
   "bin": {
