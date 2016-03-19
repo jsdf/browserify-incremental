@@ -22,7 +22,7 @@
   "dependencies": {
     "JSONStream": "^0.10.0",
     "browserify-cache-api": "^2.0.0",
-    "through2": "^0.6.2",
+    "through2": "^2.0.0",
     "xtend": "^4.0.0"
   },
   "peerDependencies": {
