@@ -7,7 +7,9 @@
     "browserifyinc": "./bin/cmd.js"
   },
   "scripts": {
-    "test": "tap test"
+    "test": "npm run lint && tap test",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix"
   },
   "author": "James Friend <james@jsdf.co> (http://jsdf.co/)",
   "license": "MIT",
@@ -27,6 +29,7 @@
     "browserify": "*"
   },
   "devDependencies": {
+    "eslint": "2.4.0",
     "tap": "^5.7.0"
   }
 }
