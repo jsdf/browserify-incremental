@@ -1,13 +1,15 @@
 {
   "name": "browserify-incremental",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Fast incremental rebuilds for browserify",
   "main": "index.js",
   "bin": {
     "browserifyinc": "./bin/cmd.js"
   },
   "scripts": {
-    "test": "tap test"
+    "test": "npm run lint && tap test",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix"
   },
   "author": "James Friend <james@jsdf.co> (http://jsdf.co/)",
   "license": "MIT",
@@ -19,8 +21,8 @@
   },
   "dependencies": {
     "JSONStream": "^0.10.0",
-    "browserify-cache-api": "^2.0.0",
-    "through2": "^0.6.2",
+    "browserify-cache-api": "^3.0.0",
+    "through2": "^2.0.0",
     "xtend": "^4.0.0"
   },
   "peerDependencies": {
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "browserify": "^13.0.0",
-    "tap": "^0.4.12"
+    "eslint": "2.4.0",
+    "tap": "^5.7.0"
   }
 }

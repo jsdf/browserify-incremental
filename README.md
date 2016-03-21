@@ -136,6 +136,10 @@ $ npm install --save browserify-incremental browserify
 
 to get just the library.
 
+## Contributing
+
+Please see the [Contributor Guidelines](CONTRIBUTING.md).
+
 # license
 
 MIT

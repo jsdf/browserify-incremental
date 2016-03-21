@@ -1,8 +1,3 @@
-var fs = require('fs');
-var path = require('path');
-var util = require('util');
-var assert = require('assert');
-
 var xtend = require('xtend');
 var through = require('through2');
 var browserify = require('browserify');
@@ -25,11 +20,11 @@ function browserifyIncremental(files, opts) {
       // opts as first arg (or no args)
       opts = files || {};
       files = undefined;
-      b =  browserify(xtend(browserifyCache.args, opts));
+      b = browserify(xtend(browserifyCache.args, opts));
     } else {
       // files as first arg, opts as second arg
       b = browserify(files, xtend(browserifyCache.args, opts));
-    }    
+    }
   }
 
   browserifyCache(b, opts);
@@ -44,17 +39,17 @@ function browserifyIncremental(files, opts) {
 function attachMetrics(b) {
   var time = null;
   var bytes = 0;
-  b.pipeline.get('record').on('end', function () {
-      time = Date.now();
+  b.pipeline.get('record').on('end', function() {
+    time = Date.now();
   });
-  
+
   b.pipeline.get('wrap').push(through(write, end));
-  function write (buf, enc, next) {
+  function write(buf, enc, next) {
     bytes += buf.length;
     this.push(buf);
     next();
   }
-  function end () {
+  function end() {
     var delta = Date.now() - time;
     b.emit('time', delta);
     b.emit('bytes', bytes);
