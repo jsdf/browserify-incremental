@@ -21,20 +21,6 @@ function run() {
     if (verbose && changes.length) console.error('changed files:\n' + changes.join('\n'));
   });
 
-  if ((b.argv._[0] === 'help' && b.argv._[1]) === 'advanced'
-  || (b.argv.h || b.argv.help) === 'advanced') {
-    return fs.createReadStream(__dirname + '/advanced.txt')
-      .pipe(process.stdout)
-      .on('close', function() { process.exit(1); })
-    ;
-  }
-  if (b.argv._[0] === 'help' || b.argv.h || b.argv.help
-  || (process.argv.length <= 2 && process.stdin.isTTY)) {
-    return fs.createReadStream(__dirname + '/usage.txt')
-      .pipe(process.stdout)
-      .on('close', function() { process.exit(1); })
-    ;
-  }
   if (b.argv.version) {
     return console.log(require('../package.json').version);
   }
