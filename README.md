@@ -1,5 +1,7 @@
 # browserify-incremental
 
+[![Join the chat at https://gitter.im/jsdf/browserify-incremental](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jsdf/browserify-incremental?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Incremental rebuild for browserify
 
 Update any source file and re-bundle, and only changed files will be parsed,
