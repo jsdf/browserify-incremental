@@ -87,7 +87,7 @@ use them like:
 var browserify = require('browserify')
 var browserifyInc = require('browserify-incremental')
 
-var b = browserify(Object.assign(browserifyInc.args, {
+var b = browserify(Object.assign({}, browserifyInc.args, {
   // your custom opts
 }))
 browserifyInc(b, {cacheFile: './browserify-cache.json'})
